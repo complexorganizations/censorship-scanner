@@ -55,31 +55,119 @@ func basicNetworkCheck() {
 func advancedNetworkCheck() {
 	// Lists of services to test
 	websiteTestList := []string{
+		"https://www.youtube.com",
+		"https://www.facebook.com",
+		"https://www.baidu.com",
+		"https://www.yahoo.com",
+		"https://www.amazon.com",
+		"https://www.wikipedia.org",
+		"https://www.qq.com",
+		"https://www.google.co.in",
+		"https://www.twitter.com",
+		"https://www.live.com",
+		"https://www.taobao.com",
+		"https://www.bing.com",
+		"https://www.instagram.com",
+		"https://www.weibo.com",
+		"https://www.sina.com.cn",
+		"https://www.linkedin.com",
+		"https://www.yahoo.co.jp",
+		"https://www.msn.com",
+		"https://www.vk.com",
+		"https://www.google.de",
+		"https://www.yandex.ru",
+		"https://www.hao123.com",
+		"https://www.google.co.uk",
+		"https://www.reddit.com",
+		"https://www.ebay.com",
+		"https://www.google.fr",
+		"https://www.t.co",
+		"https://www.tmall.com",
+		"https://www.google.com.br",
+		"https://www.360.cn",
+		"https://www.sohu.com",
+		"https://www.amazon.co.jp",
+		"https://www.pinterest.com",
+		"https://www.netflix.com",
+		"https://www.google.it",
+		"https://www.google.ru",
+		"https://www.microsoft.com",
+		"https://www.google.es",
+		"https://www.wordpress.com",
+		"https://www.gmw.cn",
+		"https://www.tumblr.com",
+		"https://www.paypal.com",
+		"https://www.blogspot.com",
+		"https://www.imgur.com",
+		"https://www.stackoverflow.com",
+		"https://www.aliexpress.com",
+		"https://www.naver.com",
+		"https://www.ok.ru",
+		"https://www.apple.com",
+		"https://www.github.com",
+		"https://www.chinadaily.com.cn",
+		"https://www.imdb.com",
+		"https://www.google.co.kr",
+		"https://www.fc2.com",
+		"https://www.jd.com",
+		"https://www.blogger.com",
+		"https://www.163.com",
+		"https://www.google.ca",
+		"https://www.whatsapp.com",
+		"https://www.amazon.in",
+		"https://www.office.com",
+		"https://www.tianya.cn",
+		"https://www.google.co.id",
+		"https://www.youku.com",
+		"https://www.rakuten.co.jp",
+		"https://www.craigslist.org",
+		"https://www.amazon.de",
+		"https://www.nicovideo.jp",
+		"https://www.google.pl",
+		"https://www.soso.com",
+		"https://www.bilibili.com",
+		"https://www.dropbox.com",
+		"https://www.xinhuanet.com",
+		"https://www.outbrain.com",
+		"https://www.pixnet.net",
+		"https://www.alibaba.com",
+		"https://www.alipay.com",
+		"https://www.microsoftonline.com",
+		"https://www.booking.com",
+		"https://www.googleusercontent.com",
+		"https://www.google.com.au",
+		"https://www.popads.net",
+		"https://www.cntv.cn",
+		"https://www.zhihu.com",
+		"https://www.amazon.co.uk",
+		"https://www.diply.com",
+		"https://www.coccoc.com",
+		"https://www.cnn.com",
+		"https://www.bbc.co.uk",
+		"https://www.twitch.tv",
+		"https://www.wikia.com",
+		"https://www.google.co.th",
+		"https://www.go.com",
+		"https://www.google.com.ph",
+		"https://www.doubleclick.net",
+		"https://www.onet.pl",
+		"https://www.googleadservices.com",
+		"https://www.accuweather.com",
+		"https://www.googleweblight.com",
+		"https://www.answers.yahoo.com",
 		"https://www.google.com",
 		"https://github.com",
 		"https://www.af.mil",
-		"https://www.facebook.com",
 		"https://www.cia.gov",
-		"https://www.amazon.com",
 		"https://americorps.gov",
-		"https://www.youtube.com",
-		"https://www.yahoo.com",
-		"https://www.apple.com",
 		"https://www.nsa.gov",
 		"https://zoom.us",
-		"https://www.reddit.com",
 		"https://www.redtube.com",
 		"https://www.xtube.com",
 		"https://www.porn.com",
 		"https://www.fbi.gov",
 		"https://www.omct.org",
-		"https://www.msn.com",
-		"https://www.netflix.com",
-		"https://www.bing.com",
-		"https://www.microsoft.com",
 		"https://www.cloudflare.com",
-		"https://www.ebay.com",
-		"https://www.instagram.com",
 		"https://chaturbate.com",
 		"https://wfrtds.org",
 		"https://www.who.int",
@@ -93,12 +181,9 @@ func advancedNetworkCheck() {
 		"https://www.tesla.com",
 		"https://www.privateinternetaccess.com",
 		"https://www.prolife.com",
-		"https://www.office.com",
 		"https://tinder.com",
 		"https://www.hrw.org",
-		"https://www.twitch.tv",
 		"https://www.bbc.com",
-		"https://www.wikipedia.org",
 		"https://www.usa.gov",
 		"https://bumble.com",
 		"https://www.academyadmissions.com",
@@ -111,15 +196,28 @@ func advancedNetworkCheck() {
 		"https://armyfuturescommand.com",
 		"https://www.nasa.gov",
 	}
+	uniqueDomains := makeUnique(websiteTestList)
 	// Start the test
-	for i := 0; i < len(websiteTestList); i++ {
-		resp, err := http.Get(websiteTestList[i])
+	for i := 0; i < len(uniqueDomains); i++ {
+		resp, err := http.Get(uniqueDomains[i])
 		if err != nil {
-			log.Println("Failed: ", websiteTestList[i])
+			log.Println("Failed: ", uniqueDomains[i])
 		} else if !(websiteTestList[i] == resp.Request.URL.String()) {
-			log.Println("Error: ", websiteTestList[i])
+			log.Println("Error: ", uniqueDomains[i])
 		}
-		//else {	//fmt.Println("Passed: ", websiteTestList[i])	}
+		// else {	//fmt.Println("Passed: ", uniqueDomains[i])	}
 		_ = resp
 	}
+}
+
+func makeUnique(randomStrings []string) []string {
+	flag := make(map[string]bool)
+	var uniqueString []string
+	for i := 0; i < len(randomStrings); i++ {
+		if !flag[randomStrings[i]] {
+			flag[randomStrings[i]] = true
+			uniqueString = append(uniqueString, randomStrings[i])
+		}
+	}
+	return uniqueString
 }
