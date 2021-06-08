@@ -25,6 +25,10 @@ func init() {
 		// Perform a basic scan if the user does not provide any instructions.
 		basicScan = true
 	}
+	// Close the program if there are no scan kinds.
+	if !basicScan && !advancedScan {
+		log.Fatal("Error: It is not possible to not perform a basic and an advanced scan at the same time.")
+	}
 	// Only perform one scan at a time.
 	if basicScan && advancedScan {
 		log.Fatal("Error: It is not possible to perform both a basic and an advanced scan at the same time.")
