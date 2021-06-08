@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -21,6 +21,10 @@ func init() {
 		flag.Parse()
 		basicScan = *tempBasicScan
 		advancedScan = *tempAdvancedScan
+	}
+	// Perform a basic scan if the user does not provide any instructions.
+	if !basicScan && !advancedScan {
+		basicScan = true
 	}
 	// Only perform one scan at a time.
 	if basicScan && advancedScan {
@@ -41,6 +45,8 @@ func basicNetworkCheck() {
 	resp, err := http.Get(basicWebsiteUsed)
 	if err != nil {
 		log.Println("Failed: ", basicWebsiteUsed)
+	} else if !(basicWebsiteUsed == resp.Request.URL.String()) {
+		log.Println("Error: ", basicWebsiteUsed)
 	} else {
 		fmt.Println("Passed: ", basicWebsiteUsed)
 	}
@@ -51,7 +57,7 @@ func advancedNetworkCheck() {
 	// Lists of services to test
 	websiteTestList := []string{
 		"https://www.google.com",
-		"https://www.github.com",
+		"https://github.com",
 		"https://www.facebook.com",
 		"https://www.amazon.com",
 		"https://www.youtube.com",
@@ -60,8 +66,8 @@ func advancedNetworkCheck() {
 		"https://zoom.us",
 		"https://www.reddit.com",
 		"https://www.redtube.com",
-		"http://www.xtube.com",
-		"http://www.porn.com",
+		"https://www.xtube.com",
+		"https://www.porn.com",
 		"https://www.msn.com",
 		"https://www.netflix.com",
 		"https://www.bing.com",
@@ -70,12 +76,20 @@ func advancedNetworkCheck() {
 		"https://www.ebay.com",
 		"https://www.instagram.com",
 		"https://chaturbate.com",
+		"https://wfrtds.org",
+		"https://www.who.int",
+		"https://www.tunnelbear.com",
 		"https://www.xswiper.com",
-		"http://www.pornhub.com",
-		"http://www.youporn.com",
-		"http://www.xvideos.com",
+		"https://www.pornhub.com",
+		"https://www.youporn.com",
+		"https://4genderjustice.org",
+		"https://www.xvideos.com",
+		"https://www.privateinternetaccess.com",
+		"https://www.prolife.com",
 		"https://www.office.com",
+		"https://www.hrw.org",
 		"https://www.twitch.tv",
+		"https://www.bbc.com",
 		"https://www.wikipedia.org",
 	}
 	// Start the test
@@ -83,6 +97,8 @@ func advancedNetworkCheck() {
 		resp, err := http.Get(websiteTestList[i])
 		if err != nil {
 			log.Println("Failed: ", websiteTestList[i])
+		} else if !(websiteTestList[i] == resp.Request.URL.String()) {
+			log.Println("Error: ", websiteTestList[i])
 		} else {
 			fmt.Println("Passed: ", websiteTestList[i])
 		}
