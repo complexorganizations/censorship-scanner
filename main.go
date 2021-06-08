@@ -1,31 +1,50 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
+	"flag"
 	"log"
 	"net/http"
 	"os"
 )
 
+var (
+	basicScan    bool
+	advancedScan bool
+)
+
 func init() {
+	// Decide what type of scan to carry out
 	if len(os.Args) > 1 {
-	} else {
-		// fmt.Println("A comprehensive scan of your network takes less than 5 seconds with network tester.")
+		tempBasicScan := flag.Bool("basic", false, "Perform a simple network scan.")
+		tempAdvancedScan := flag.Bool("advanced", false, "Perform a thorough network scan.")
+		flag.Parse()
+		basicScan = *tempBasicScan
+		advancedScan = *tempAdvancedScan
+	}
+	// Only perform one scan at a time.
+	if basicScan && advancedScan {
+		log.Fatal("Error: It is not possible to perform both a basic and an advanced scan at the same time.")
 	}
 }
 
 func main() {
-	basicNetworkCheck()
+	if basicScan {
+		basicNetworkCheck()
+	} else if advancedScan {
+		advancedNetworkCheck()
+	}
 }
 
 func basicNetworkCheck() {
 	basicWebsiteUsed := "https://www.example.com"
 	resp, err := http.Get(basicWebsiteUsed)
 	if err != nil {
-		log.Print("Failure: ", basicWebsiteUsed)
+		log.Println("Failed: ", basicWebsiteUsed)
+	} else {
+		fmt.Println("Passed: ", basicWebsiteUsed)
 	}
 	_ = resp
-	advancedNetworkCheck()
 }
 
 func advancedNetworkCheck() {
@@ -63,7 +82,9 @@ func advancedNetworkCheck() {
 	for i := 0; i < len(websiteTestList); i++ {
 		resp, err := http.Get(websiteTestList[i])
 		if err != nil {
-			log.Print("Failure: ", websiteTestList[i])
+			log.Println("Failed: ", websiteTestList[i])
+		} else {
+			fmt.Println("Passed: ", websiteTestList[i])
 		}
 		_ = resp
 	}
