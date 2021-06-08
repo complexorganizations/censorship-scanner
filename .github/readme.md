@@ -14,29 +14,17 @@ Censorship-Scanner will scan your local network and determine if there is any ne
 ---
 ### Q&A
 
-How
-- 
-- 
-- 
-- 
+What is the purpose of censorship-scanner?
+- censorship-scanner is a high-level network scanner that will scan your local network and detect if network-based censorship is present.
 
-Which
-- 
-- 
-- 
--
+Is it possible to get around browser-based censorship using this?
+- No, This is just a scanner.
 
-Is
-- 
-- 
-- 
--
+Are there any logs on this?
+- No
 
-How 
-- 
-- 
-- 
--
+Is it possible to use this to see if your DNS provider is limiting access to a particular platform?
+- Yes
 
 ---
 ### Author
