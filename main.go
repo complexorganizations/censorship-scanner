@@ -56,8 +56,6 @@ func basicNetworkCheck() {
 				log.Println("Failed: ", basicWebsiteUsed)
 			} else if !(basicWebsiteUsed == resp.Request.URL.String()) {
 				log.Println("Error: ", basicWebsiteUsed)
-			} else {
-				fmt.Println("Passed: ", basicWebsiteUsed)
 			}
 		}
 	}
@@ -255,8 +253,6 @@ func advancedNetworkCheck() {
 						log.Println("Failed: ", uniqueDomains[i])
 					} else if !(websiteTestList[i] == resp.Request.URL.String()) {
 						log.Println("Error: ", uniqueDomains[i])
-					} else {
-						fmt.Println("Passed: ", uniqueDomains[i])
 					}
 				}
 			}
