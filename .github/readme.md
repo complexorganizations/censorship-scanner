@@ -21,6 +21,7 @@ Let's start the binary.
 ```
 censorship-scanner -advanced
 ```
+You can usually disregard `Error`, but if something `Failed`, you most likely have a problem.
 
 ---
 ### Q&A
