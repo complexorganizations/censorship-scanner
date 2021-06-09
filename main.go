@@ -3,11 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -55,7 +57,8 @@ func basicNetworkCheck() {
 			sendTheRequest(basicWebsiteUsed)
 		}
 	}
-	fmt.Println(getCurrentIP())
+	fmt.Println("Private IP:", getCurrentPrivateIP())
+	fmt.Println("Public IP:", getCurrentPublicIP())
 }
 
 func advancedNetworkCheck() {
@@ -193,6 +196,7 @@ func advancedNetworkCheck() {
 		"https://www.amazon.co.uk",
 		"https://www.diply.com",
 		"https://www.coccoc.com",
+		"https://www.eff.org",
 		"https://www.pornmd.com",
 		"https://www.cnn.com",
 		"https://www.bbc.co.uk",
@@ -261,7 +265,8 @@ func advancedNetworkCheck() {
 			}
 		}
 	}
-	fmt.Println(getCurrentIP())
+	fmt.Println("Private IP:", getCurrentPrivateIP())
+	fmt.Println("Public IP:", getCurrentPublicIP())
 }
 
 func sendTheRequest(url string) {
@@ -293,12 +298,23 @@ func handleErrors(err error) {
 }
 
 // Obtain the current IP address of the user.
-func getCurrentIP() []net.IP {
+func getCurrentPrivateIP() []net.IP {
 	hostName, err := os.Hostname()
 	handleErrors(err)
 	getIP, err := net.LookupIP(hostName)
 	handleErrors(err)
 	return getIP
+}
+
+func getCurrentPublicIP() []string {
+	response, err := http.Get("https://checkip.amazonaws.com")
+	handleErrors(err)
+	body, err := io.ReadAll(response.Body)
+	handleErrors(err)
+	defer response.Body.Close()
+	regex := regexp.MustCompile(`\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b`)
+	foundIP := regex.FindAllString(string(body), -1)
+	return foundIP
 }
 
 // Validate the URI
