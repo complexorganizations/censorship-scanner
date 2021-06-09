@@ -244,16 +244,13 @@ func advancedNetworkCheck() {
 	// Validate the urls
 	for i := 0; i < len(uniqueDomains); i++ {
 		if validURL(uniqueDomains[i]) {
-			// Start the test
-			for i := 0; i < len(uniqueDomains); i++ {
-				// All insecure http requests are blocked.
-				if !strings.Contains(uniqueDomains[i], "http://") {
-					resp, err := http.Get(uniqueDomains[i])
-					if err != nil {
-						log.Println("Failed: ", uniqueDomains[i])
-					} else if !(websiteTestList[i] == resp.Request.URL.String()) {
-						log.Println("Error: ", uniqueDomains[i])
-					}
+			// All insecure http requests are blocked.
+			if !strings.Contains(uniqueDomains[i], "http://") {
+				resp, err := http.Get(uniqueDomains[i])
+				if err != nil {
+					log.Println("Failed: ", uniqueDomains[i])
+				} else if !(websiteTestList[i] == resp.Request.URL.String()) {
+					log.Println("Error: ", uniqueDomains[i])
 				}
 			}
 		}
