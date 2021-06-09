@@ -49,6 +49,7 @@ func main() {
 func basicNetworkCheck() {
 	basicWebsiteUsed := "https://www.example.com"
 	if validURL(basicWebsiteUsed) {
+		// All insecure http requests are blocked.
 		if !strings.Contains(basicWebsiteUsed, "http://") {
 			resp, err := http.Get(basicWebsiteUsed)
 			if err != nil {
@@ -234,6 +235,7 @@ func advancedNetworkCheck() {
 		if validURL(uniqueDomains[i]) {
 			// Start the test
 			for i := 0; i < len(uniqueDomains); i++ {
+				// All insecure http requests are blocked.
 				if !strings.Contains(uniqueDomains[i], "http://") {
 					resp, err := http.Get(uniqueDomains[i])
 					if err != nil {
