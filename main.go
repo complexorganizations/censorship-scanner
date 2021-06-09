@@ -30,7 +30,7 @@ func init() {
 	}
 	// Close the program if there are no scan kinds.
 	if !basicScan && !advancedScan {
-		log.Fatal("Error: It's impossible to avoid doing a basic and advanced scan..")
+		log.Fatal("Error: It's impossible to avoid doing a basic and advanced scan.")
 	}
 	// Only perform one scan at a time.
 	if basicScan && advancedScan {
