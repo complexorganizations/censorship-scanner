@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 )
 
 var (
@@ -48,13 +49,15 @@ func main() {
 func basicNetworkCheck() {
 	basicWebsiteUsed := "https://www.example.com"
 	if validURL(basicWebsiteUsed) {
-		resp, err := http.Get(basicWebsiteUsed)
-		if err != nil {
-			log.Println("Failed: ", basicWebsiteUsed)
-		} else if !(basicWebsiteUsed == resp.Request.URL.String()) {
-			log.Println("Error: ", basicWebsiteUsed)
-		} else {
-			fmt.Println("Passed: ", basicWebsiteUsed)
+		if !strings.Contains(basicWebsiteUsed, "http://") {
+			resp, err := http.Get(basicWebsiteUsed)
+			if err != nil {
+				log.Println("Failed: ", basicWebsiteUsed)
+			} else if !(basicWebsiteUsed == resp.Request.URL.String()) {
+				log.Println("Error: ", basicWebsiteUsed)
+			} else {
+				fmt.Println("Passed: ", basicWebsiteUsed)
+			}
 		}
 	}
 	fmt.Println(getCurrentIP())
@@ -87,6 +90,22 @@ func advancedNetworkCheck() {
 		"https://yandex.ru",
 		"https://www.hao123.com",
 		"https://www.google.co.uk",
+		"https://cloud.google.com",
+		"https://aws.amazon.com",
+		"https://www.hashicorp.com",
+		"https://www.sap.com",
+		"https://www.cisco.com",
+		"https://www.netflix.com",
+		"https://www.hulu.com",
+		"https://www.adobe.com",
+		"https://www.workday.com",
+		"https://mega.io",
+		"https://duckduckgo.com",
+		"https://time.com",
+		"https://azure.microsoft.com",
+		"https://www.ibm.com",
+		"https://www.oracle.com",
+		"https://www.salesforce.com",
 		"https://www.reddit.com",
 		"https://www.ebay.com",
 		"https://www.google.fr",
@@ -215,13 +234,15 @@ func advancedNetworkCheck() {
 		if validURL(uniqueDomains[i]) {
 			// Start the test
 			for i := 0; i < len(uniqueDomains); i++ {
-				resp, err := http.Get(uniqueDomains[i])
-				if err != nil {
-					log.Println("Failed: ", uniqueDomains[i])
-				} else if !(websiteTestList[i] == resp.Request.URL.String()) {
-					log.Println("Error: ", uniqueDomains[i])
-				} else {
-					fmt.Println("Passed: ", uniqueDomains[i])
+				if !strings.Contains(uniqueDomains[i], "http://") {
+					resp, err := http.Get(uniqueDomains[i])
+					if err != nil {
+						log.Println("Failed: ", uniqueDomains[i])
+					} else if !(websiteTestList[i] == resp.Request.URL.String()) {
+						log.Println("Error: ", uniqueDomains[i])
+					} else {
+						fmt.Println("Passed: ", uniqueDomains[i])
+					}
 				}
 			}
 		}
