@@ -12,6 +12,17 @@ Censorship-Scanner will scan your local network and determine if there is any ne
 - 
 
 ---
+### Installation
+Let's begin by obtaining the most recent version of the Censorship-Scanner binary.
+```
+go get -v -u github.com/complexorganizations/censorship-scanner
+```
+Let's start the binary.
+```
+censorship-scanner -advanced
+```
+
+---
 ### Q&A
 
 What is the purpose of censorship-scanner?
