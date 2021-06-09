@@ -269,6 +269,7 @@ func advancedNetworkCheck() {
 	fmt.Println("Public IP:", getCurrentPublicIP())
 }
 
+// send all the request
 func sendTheRequest(url string) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -278,6 +279,7 @@ func sendTheRequest(url string) {
 	}
 }
 
+// Make all the array unique
 func makeUnique(randomStrings []string) []string {
 	flag := make(map[string]bool)
 	var uniqueString []string
@@ -297,7 +299,7 @@ func handleErrors(err error) {
 	}
 }
 
-// Obtain the current IP address of the user.
+// Obtain the private IP address of the system.
 func getCurrentPrivateIP() []net.IP {
 	hostName, err := os.Hostname()
 	handleErrors(err)
@@ -306,6 +308,7 @@ func getCurrentPrivateIP() []net.IP {
 	return getIP
 }
 
+// Obtain the public IP address of the system.
 func getCurrentPublicIP() []string {
 	response, err := http.Get("https://checkip.amazonaws.com")
 	handleErrors(err)
