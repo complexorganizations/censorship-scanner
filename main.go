@@ -48,15 +48,11 @@ func main() {
 
 func basicNetworkCheck() {
 	basicWebsiteUsed := "https://www.example.com"
+	// Verify that the urls are correct.
 	if validURL(basicWebsiteUsed) {
 		// All insecure http requests are blocked.
 		if !strings.Contains(basicWebsiteUsed, "http://") {
-			resp, err := http.Get(basicWebsiteUsed)
-			if err != nil {
-				log.Println("Failed: ", basicWebsiteUsed)
-			} else if !(basicWebsiteUsed == resp.Request.URL.String()) {
-				log.Println("Error: ", basicWebsiteUsed)
-			}
+			sendTheRequest(basicWebsiteUsed)
 		}
 	}
 	fmt.Println(getCurrentIP())
@@ -241,21 +237,25 @@ func advancedNetworkCheck() {
 		"https://www.nasa.gov",
 	}
 	uniqueDomains := makeUnique(websiteTestList)
-	// Validate the urls
+	// Verify that the urls are correct.
 	for i := 0; i < len(uniqueDomains); i++ {
 		if validURL(uniqueDomains[i]) {
 			// All insecure http requests are blocked.
 			if !strings.Contains(uniqueDomains[i], "http://") {
-				resp, err := http.Get(uniqueDomains[i])
-				if err != nil {
-					log.Println("Failed: ", uniqueDomains[i])
-				} else if !(websiteTestList[i] == resp.Request.URL.String()) {
-					log.Println("Error: ", uniqueDomains[i])
-				}
+				sendTheRequest(uniqueDomains[i])
 			}
 		}
 	}
 	fmt.Println(getCurrentIP())
+}
+
+func sendTheRequest(url string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println("Failed: ", url)
+	} else if !(url == resp.Request.URL.String()) {
+		log.Println("Error: ", url)
+	}
 }
 
 func makeUnique(randomStrings []string) []string {
