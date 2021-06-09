@@ -4,7 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 )
 
@@ -45,14 +47,17 @@ func main() {
 
 func basicNetworkCheck() {
 	basicWebsiteUsed := "https://www.example.com"
-	resp, err := http.Get(basicWebsiteUsed)
-	if err != nil {
-		log.Println("Failed: ", basicWebsiteUsed)
-	} else if !(basicWebsiteUsed == resp.Request.URL.String()) {
-		log.Println("Error: ", basicWebsiteUsed)
-	} else {
-		fmt.Println("Passed: ", basicWebsiteUsed)
+	if validURL(basicWebsiteUsed) {
+		resp, err := http.Get(basicWebsiteUsed)
+		if err != nil {
+			log.Println("Failed: ", basicWebsiteUsed)
+		} else if !(basicWebsiteUsed == resp.Request.URL.String()) {
+			log.Println("Error: ", basicWebsiteUsed)
+		} else {
+			fmt.Println("Passed: ", basicWebsiteUsed)
+		}
 	}
+	fmt.Println(getCurrentIP())
 }
 
 func advancedNetworkCheck() {
@@ -104,6 +109,7 @@ func advancedNetworkCheck() {
 		"https://imgur.com",
 		"https://www.stackoverflow.com",
 		"https://www.aliexpress.com",
+		"https://hentaihaven.xxx",
 		"https://www.naver.com",
 		"https://www.ok.ru",
 		"https://www.apple.com",
@@ -144,6 +150,7 @@ func advancedNetworkCheck() {
 		"https://www.amazon.co.uk",
 		"https://www.diply.com",
 		"https://www.coccoc.com",
+		"https://www.pornmd.com",
 		"https://www.cnn.com",
 		"https://www.bbc.co.uk",
 		"https://www.twitch.tv",
@@ -202,17 +209,23 @@ func advancedNetworkCheck() {
 		"https://www.nasa.gov",
 	}
 	uniqueDomains := makeUnique(websiteTestList)
-	// Start the test
+	// Validate the urls
 	for i := 0; i < len(uniqueDomains); i++ {
-		resp, err := http.Get(uniqueDomains[i])
-		if err != nil {
-			log.Println("Failed: ", uniqueDomains[i])
-		} else if !(websiteTestList[i] == resp.Request.URL.String()) {
-			log.Println("Error: ", uniqueDomains[i])
-		} else {
-			fmt.Println("Passed: ", uniqueDomains[i])
+		if validURL(uniqueDomains[i]) {
+			// Start the test
+			for i := 0; i < len(uniqueDomains); i++ {
+				resp, err := http.Get(uniqueDomains[i])
+				if err != nil {
+					log.Println("Failed: ", uniqueDomains[i])
+				} else if !(websiteTestList[i] == resp.Request.URL.String()) {
+					log.Println("Error: ", uniqueDomains[i])
+				} else {
+					fmt.Println("Passed: ", uniqueDomains[i])
+				}
+			}
 		}
 	}
+	fmt.Println(getCurrentIP())
 }
 
 func makeUnique(randomStrings []string) []string {
@@ -225,4 +238,30 @@ func makeUnique(randomStrings []string) []string {
 		}
 	}
 	return uniqueString
+}
+
+// Take care of any errors that arise.
+func handleErrors(err error) {
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+// Obtain the current IP address of the user.
+func getCurrentIP() []net.IP {
+	hostName, err := os.Hostname()
+	handleErrors(err)
+	getIP, err := net.LookupIP(hostName)
+	handleErrors(err)
+	return getIP
+}
+
+// Validate the URI
+func validURL(uri string) bool {
+	validUri, err := url.ParseRequestURI(uri)
+	if err != nil {
+		return false
+	}
+	_ = validUri
+	return true
 }
