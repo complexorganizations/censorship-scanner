@@ -1,3 +1,8 @@
+/*
+Tasks:
+- Validate all the TLS. (https://play.golang.org/p/YcQq3KpUZNX)
+- Add more security freatures.
+*/
 package main
 
 import (
