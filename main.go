@@ -1,11 +1,7 @@
-/*
-Tasks:
-- Validate all the TLS. (https://play.golang.org/p/YcQq3KpUZNX)
-- Add more security freatures.
-*/
 package main
 
 import (
+	"crypto/tls"
 	"flag"
 	"fmt"
 	"io"
@@ -60,6 +56,7 @@ func basicNetworkCheck() {
 		// All insecure http requests are blocked.
 		if !strings.Contains(basicWebsiteUsed, "http://") {
 			sendTheRequest(basicWebsiteUsed)
+			validateSSLCert(basicWebsiteUsed)
 		}
 	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
@@ -277,6 +274,7 @@ func advancedNetworkCheck() {
 			// All insecure http requests are blocked.
 			if !strings.Contains(uniqueDomains[i], "http://") {
 				sendTheRequest(uniqueDomains[i])
+				validateSSLCert(uniqueDomains[i])
 			}
 		}
 	}
@@ -288,9 +286,11 @@ func advancedNetworkCheck() {
 func sendTheRequest(url string) {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Println("Failed: ", url)
+		log.Println("Failed URL: ", url)
 	} else if !(url == resp.Request.URL.String()) {
-		log.Println("Error: ", url)
+		log.Println("Error URL: ", url)
+	} else {
+		fmt.Println("Valid URL: ", url)
 	}
 }
 
@@ -343,4 +343,24 @@ func validURL(uri string) bool {
 	}
 	_ = validUri
 	return true
+}
+
+// Validate all the SSL Certs
+func validateSSLCert(hostname string) {
+	// Take a look at the URL and parse it.
+	parsedURL, err := url.Parse(hostname)
+	handleErrors(err)
+	// obtain the domain name
+	parsedHostname := fmt.Sprint(parsedURL.Host)
+	// verify the ssl
+	callTCP, err := tls.Dial("tcp", parsedHostname+":443", nil)
+	if err != nil {
+		log.Println("Failed SSL:", parsedHostname)
+	}
+	err = callTCP.VerifyHostname(parsedHostname)
+	if err != nil {
+		log.Println("Error SSL:", parsedHostname)
+	} else {
+		fmt.Println("Valid SSL: ", parsedHostname)
+	}
 }
