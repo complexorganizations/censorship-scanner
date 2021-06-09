@@ -73,6 +73,7 @@ func advancedNetworkCheck() {
 		"https://www.google.co.in",
 		"https://twitter.com",
 		"https://outlook.live.com",
+		"https://www.torproject.org",
 		"https://www.taobao.com",
 		"https://www.bing.com",
 		"https://www.instagram.com",
