@@ -6,7 +6,7 @@ Censorship-Scanner will scan your local network and determine if there is any ne
 
 ---
 ### Features
-- 
+- Check for censorship on the local network.
 - 
 - 
 - 
