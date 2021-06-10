@@ -91,7 +91,6 @@ func advancedNetworkCheck() {
 		"https://www.disneyplus.com",
 		"https://www.sling.com",
 		"https://rsf.org",
-		"https://www.akamai.com",
 		"https://www.linode.com",
 		"https://www.fubo.tv",
 		"https://www.philo.com",
@@ -157,7 +156,6 @@ func advancedNetworkCheck() {
 		"https://gitlab.com",
 		"https://www.fox.com",
 		"https://www.nbc.com",
-		"https://azure.microsoft.com",
 		"https://www.ibm.com",
 		"https://www.oracle.com",
 		"https://www.salesforce.com",
@@ -281,7 +279,6 @@ func advancedNetworkCheck() {
 		"https://www.federalreserveeducation.org",
 		"https://armyfuturescommand.com",
 		"https://www.nasa.gov",
-		//"",
 	}
 	uniqueDomains := makeUnique(websiteTestList)
 	// Send the http request and see if certificates are valid.
