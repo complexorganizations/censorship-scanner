@@ -56,7 +56,6 @@ func basicNetworkCheck() {
 		// All insecure http requests are blocked.
 		if !strings.Contains(basicWebsiteUsed, "http://") {
 			sendTheRequest(basicWebsiteUsed)
-			validateSSLCert(basicWebsiteUsed)
 		}
 	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
@@ -274,24 +273,11 @@ func advancedNetworkCheck() {
 			// All insecure http requests are blocked.
 			if !strings.Contains(uniqueDomains[i], "http://") {
 				sendTheRequest(uniqueDomains[i])
-				validateSSLCert(uniqueDomains[i])
 			}
 		}
 	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
 	fmt.Println("Public IP:", getCurrentPublicIP())
-}
-
-// send all the request
-func sendTheRequest(url string) {
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Println("Failed URL: ", url)
-	} else if !(url == resp.Request.URL.String()) {
-		log.Println("Error URL: ", url)
-	} else {
-		fmt.Println("Valid URL: ", url)
-	}
 }
 
 // Make all the array unique
@@ -345,6 +331,20 @@ func validURL(uri string) bool {
 	return true
 }
 
+// send all the request
+func sendTheRequest(url string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println("Censored URL: ", url)
+	} else if !(url == resp.Request.URL.String()) {
+		log.Println("Error URL: ", url)
+		validateSSLCert(url)
+	} else {
+		fmt.Println("Valid URL: ", url)
+		validateSSLCert(url)
+	}
+}
+
 // Validate all the SSL Certs
 func validateSSLCert(hostname string) {
 	// Take a look at the URL and parse it.
@@ -355,7 +355,7 @@ func validateSSLCert(hostname string) {
 	// verify the ssl
 	callTCP, err := tls.Dial("tcp", parsedHostname+":443", nil)
 	if err != nil {
-		log.Println("Failed SSL:", parsedHostname)
+		log.Println("Censored SSL:", parsedHostname)
 	}
 	callTCP.Close()
 	err = callTCP.VerifyHostname(parsedHostname)
