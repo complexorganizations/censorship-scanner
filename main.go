@@ -400,10 +400,10 @@ func sendTheRequest(url string) {
 			if err != nil {
 				log.Println("Censored URL: ", url)
 			} else if !(url == resp.Request.URL.String()) {
-				//log.Println("Error URL: ", url)
+				log.Println("Error URL: ", url)
 				validateSSLCert(url)
 			} else {
-				//fmt.Println("Valid URL: ", url)
+				fmt.Println("Valid URL: ", url)
 				validateSSLCert(url)
 			}
 		}
@@ -425,8 +425,8 @@ func validateSSLCert(hostname string) {
 	callTCP.Close()
 	err = callTCP.VerifyHostname(parsedHostname)
 	if err != nil {
-		//log.Println("Error SSL:", parsedHostname)
+		log.Println("Error SSL:", parsedHostname)
 	} else {
-		//fmt.Println("Valid SSL: ", parsedHostname)
+		fmt.Println("Valid SSL: ", parsedHostname)
 	}
 }
