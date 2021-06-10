@@ -51,13 +51,8 @@ func main() {
 
 func basicNetworkCheck() {
 	basicWebsiteUsed := "https://www.example.com"
-	// Verify that the urls are correct.
-	if validURL(basicWebsiteUsed) {
-		// All insecure http requests are blocked.
-		if !strings.Contains(basicWebsiteUsed, "http://") {
-			sendTheRequest(basicWebsiteUsed)
-		}
-	}
+	// Send the http request and check for any certificates.
+	sendTheRequest(basicWebsiteUsed)
 	fmt.Println("Private IP:", getCurrentPrivateIP())
 	fmt.Println("Public IP:", getCurrentPublicIP())
 }
@@ -289,14 +284,9 @@ func advancedNetworkCheck() {
 		//"",
 	}
 	uniqueDomains := makeUnique(websiteTestList)
-	// Verify that the urls are correct.
+	// Send the http request and see if certificates are valid.
 	for i := 0; i < len(uniqueDomains); i++ {
-		if validURL(uniqueDomains[i]) {
-			// All insecure http requests are blocked.
-			if !strings.Contains(uniqueDomains[i], "http://") {
-				sendTheRequest(uniqueDomains[i])
-			}
-		}
+		sendTheRequest(uniqueDomains[i])
 	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
 	fmt.Println("Public IP:", getCurrentPublicIP())
@@ -333,13 +323,21 @@ func getCurrentPrivateIP() []net.IP {
 
 // Obtain the public IP address of the system.
 func getCurrentPublicIP() []string {
-	response, err := http.Get("https://checkip.amazonaws.com")
-	handleErrors(err)
-	body, err := io.ReadAll(response.Body)
-	handleErrors(err)
-	defer response.Body.Close()
-	regex := regexp.MustCompile(`\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b`)
-	foundIP := regex.FindAllString(string(body), -1)
+	var foundIP []string
+	url := "https://checkip.amazonaws.com"
+	// Verify that the urls are correct.
+	if validURL(url) {
+		// All insecure http requests are blocked.
+		if !strings.Contains(url, "http://") {
+			response, err := http.Get(url)
+			handleErrors(err)
+			body, err := io.ReadAll(response.Body)
+			handleErrors(err)
+			defer response.Body.Close()
+			regex := regexp.MustCompile(`\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b`)
+			foundIP = regex.FindAllString(string(body), -1)
+		}
+	}
 	return foundIP
 }
 
@@ -355,15 +353,21 @@ func validURL(uri string) bool {
 
 // send all the request
 func sendTheRequest(url string) {
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Println("Censored URL: ", url)
-	} else if !(url == resp.Request.URL.String()) {
-		log.Println("Error URL: ", url)
-		validateSSLCert(url)
-	} else {
-		fmt.Println("Valid URL: ", url)
-		validateSSLCert(url)
+	// Verify that the urls are correct.
+	if validURL(url) {
+		// All insecure http requests are blocked.
+		if !strings.Contains(url, "http://") {
+			resp, err := http.Get(url)
+			if err != nil {
+				log.Println("Censored URL: ", url)
+			} else if !(url == resp.Request.URL.String()) {
+				log.Println("Error URL: ", url)
+				validateSSLCert(url)
+			} else {
+				fmt.Println("Valid URL: ", url)
+				validateSSLCert(url)
+			}
+		}
 	}
 }
 
