@@ -77,6 +77,8 @@ func advancedNetworkCheck() {
 		"https://www.psiphon3.com",
 		"https://riseup.net",
 		"https://www.fastly.com",
+		"https://www.digitalocean.com",
+		"https://www.vultr.com",
 		"https://www.kraken.com",
 		"https://www.akamai.com",
 		"https://tv.youtube.com",
