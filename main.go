@@ -357,7 +357,7 @@ func validateSSLCert(hostname string) {
 	if err != nil {
 		log.Println("Failed SSL:", parsedHostname)
 	}
-	defer callTCP.Close()
+	callTCP.Close()
 	err = callTCP.VerifyHostname(parsedHostname)
 	if err != nil {
 		log.Println("Error SSL:", parsedHostname)
