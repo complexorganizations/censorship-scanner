@@ -351,7 +351,7 @@ func validateSSLCert(hostname string) {
 	parsedURL, err := url.Parse(hostname)
 	handleErrors(err)
 	// obtain the domain name
-	parsedHostname := fmt.Sprint(parsedURL.Host)
+	parsedHostname := fmt.Sprint(parsedURL.Hostname())
 	// verify the ssl
 	callTCP, err := tls.Dial("tcp", parsedHostname+":443", nil)
 	if err != nil {
