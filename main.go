@@ -45,15 +45,21 @@ func main() {
 	if basicScan {
 		basicNetworkCheck()
 	} else if advancedScan {
-		go torExitNodeTest()
 		advancedNetworkCheck()
+		torExitNodeTest()
 	}
 }
 
 func basicNetworkCheck() {
-	basicWebsiteUsed := "https://www.example.com"
+	basicWebsiteUsed := []string{
+		"https://www.example.com",
+		"https://www.example.net",
+		"https://www.example.org",
+	}
 	// Send the http request and check for any certificates.
-	sendTheRequest(basicWebsiteUsed)
+	for i := 0; i < len(basicWebsiteUsed); i++ {
+		sendTheRequest(basicWebsiteUsed[i])
+	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
 	fmt.Println("Public IP:", getCurrentPublicIP())
 }
@@ -407,7 +413,7 @@ func getCurrentPublicIP() []string {
 			handleErrors(err)
 			body, err := io.ReadAll(response.Body)
 			handleErrors(err)
-			defer response.Body.Close()
+			response.Body.Close()
 			regex := regexp.MustCompile(`\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b`)
 			foundIP = regex.FindAllString(string(body), -1)
 		}
@@ -427,7 +433,7 @@ func getTorExitNodes() []string {
 			handleErrors(err)
 			body, err := io.ReadAll(response.Body)
 			handleErrors(err)
-			defer response.Body.Close()
+			response.Body.Close()
 			regex := regexp.MustCompile(`\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b`)
 			torExitNodeIPS = regex.FindAllString(string(body), -1)
 		}
@@ -456,10 +462,10 @@ func sendTheRequest(url string) {
 				log.Println("Censored URL: ", url)
 			} else if !(url == resp.Request.URL.String()) {
 				log.Println("Error URL: ", url)
-				go validateSSLCert(url)
+				validateSSLCert(url)
 			} else {
 				fmt.Println("Valid URL: ", url)
-				go validateSSLCert(url)
+				validateSSLCert(url)
 			}
 		}
 	}
