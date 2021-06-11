@@ -12,6 +12,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 var (
@@ -331,7 +332,8 @@ func advancedNetworkCheck() {
 func torExitNodeTest() {
 	torExitIPs := getTorExitNodes()
 	for i := 0; i < 250; i++ {
-		_, err := net.Dial("tcp", torExitIPs[i]+":80")
+	timeout := time.Duration(2) * time.Second
+		_, err := net.DialTimeout("tcp", torExitIPs[i]+":80", timeout)
 		if err != nil {
 			log.Println("Censored TOR:", torExitIPs[i])
 		} else {
