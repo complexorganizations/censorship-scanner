@@ -38,6 +38,9 @@ Are there any logs on this?
 Is it possible to use this to see if your DNS provider is limiting access to a particular platform?
 - Yes
 
+What is the total number of scans?
+- 500
+
 ---
 ### Author
 * Name: Prajwal Koirala
