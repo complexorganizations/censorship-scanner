@@ -456,10 +456,10 @@ func sendTheRequest(url string) {
 				log.Println("Censored URL: ", url)
 			} else if !(url == resp.Request.URL.String()) {
 				log.Println("Error URL: ", url)
-				validateSSLCert(url)
+				go validateSSLCert(url)
 			} else {
 				fmt.Println("Valid URL: ", url)
-				validateSSLCert(url)
+				go validateSSLCert(url)
 			}
 		}
 	}
