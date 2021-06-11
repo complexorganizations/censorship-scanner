@@ -45,6 +45,7 @@ func main() {
 	if basicScan {
 		basicNetworkCheck()
 	} else if advancedScan {
+		go torExitNodeTest()
 		advancedNetworkCheck()
 	}
 }
@@ -352,6 +353,24 @@ func advancedNetworkCheck() {
 	fmt.Println("Public IP:", getCurrentPublicIP())
 }
 
+func torExitNodeTest() {
+	torExitIPs := getTorExitNodes()
+	for i := 0; i < len(torExitIPs); i++ {
+		_, err := http.Get(torExitIPs[i])
+		if err == nil {
+			//log.Println("Censored TOR: ", torExitIPs[i])
+		} else {
+			_, err := net.Dial("tcp", torExitIPs[i]+":80")
+			//checkTor.Close()
+			if err != nil {
+				log.Println("Censored TOR:", torExitIPs[i])
+			} else {
+				fmt.Println("Valid Tor:", torExitIPs[i])
+			}
+		}
+	}
+}
+
 // Make all the array unique
 func makeUnique(randomStrings []string) []string {
 	flag := make(map[string]bool)
@@ -399,6 +418,26 @@ func getCurrentPublicIP() []string {
 		}
 	}
 	return foundIP
+}
+
+// Obtain the public IP address of all tor exit nodes.
+func getTorExitNodes() []string {
+	var torExitNodeIPS []string
+	url := "https://check.torproject.org/torbulkexitlist"
+	// Verify that the urls are correct.
+	if validURL(url) {
+		// All insecure http requests are blocked.
+		if !strings.Contains(url, "http://") {
+			response, err := http.Get(url)
+			handleErrors(err)
+			body, err := io.ReadAll(response.Body)
+			handleErrors(err)
+			defer response.Body.Close()
+			regex := regexp.MustCompile(`\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b`)
+			torExitNodeIPS = regex.FindAllString(string(body), -1)
+		}
+	}
+	return torExitNodeIPS
 }
 
 // Validate the URI
