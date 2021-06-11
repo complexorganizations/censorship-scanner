@@ -361,7 +361,7 @@ func torExitNodeTest() {
 		if err != nil {
 			log.Println("Censored TOR:", torExitIPs[i])
 		} else {
-			fmt.Println("Valid Tor:", torExitIPs[i])
+			fmt.Println("Valid TOR:", torExitIPs[i])
 		}
 	}
 }
