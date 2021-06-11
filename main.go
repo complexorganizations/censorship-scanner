@@ -59,6 +59,7 @@ func basicNetworkCheck() {
 		"https://www.example.net",
 		"https://www.example.org",
 	}
+	sort.Strings(basicWebsiteUsed)
 	// Send the http request and check for any certificates.
 	for i := 0; i < len(basicWebsiteUsed); i++ {
 		sendTheRequest(basicWebsiteUsed[i])
@@ -334,6 +335,7 @@ func advancedNetworkCheck() {
 // To see if you can connect to the Tor network.
 func torExitNodeTest() {
 	torExitIPs := getTorExitNodes()
+	sort.Strings(torExitIPs)
 	for i := 0; i < 250; i++ {
 		_, err := net.DialTimeout("tcp", torExitIPs[i]+":80", time.Duration(2) * time.Second)
 		if err != nil {
@@ -367,6 +369,7 @@ func publicDnsTest() {
 		"80.67.169.40",
 		"80.67.169.12",
 	}
+	sort.Strings(publicDnsList)
 	for i := 0; i < len(publicDnsList); i++ {
 		_, err := net.DialTimeout("tcp", publicDnsList[i]+":53", time.Duration(2) * time.Second)
 		if err != nil {
