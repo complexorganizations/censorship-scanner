@@ -19,6 +19,7 @@ import (
 var (
 	basicScan    bool
 	advancedScan bool
+	err          error
 )
 
 func init() {
@@ -337,7 +338,7 @@ func torExitNodeTest() {
 	torExitIPs := getTorExitNodes()
 	sort.Strings(torExitIPs)
 	for i := 0; i < 250; i++ {
-		_, err := net.DialTimeout("tcp", torExitIPs[i]+":80", time.Duration(2) * time.Second)
+		_, err = net.DialTimeout("tcp", torExitIPs[i]+":80", time.Duration(2)*time.Second)
 		if err != nil {
 			log.Println("Censored TOR:", torExitIPs[i])
 		} else {
@@ -371,7 +372,7 @@ func publicDnsTest() {
 	}
 	sort.Strings(publicDnsList)
 	for i := 0; i < len(publicDnsList); i++ {
-		_, err := net.DialTimeout("tcp", publicDnsList[i]+":53", time.Duration(2) * time.Second)
+		_, err = net.DialTimeout("tcp", publicDnsList[i]+":53", time.Duration(2)*time.Second)
 		if err != nil {
 			log.Println("Censored DNS:", publicDnsList[i])
 		} else {
@@ -451,7 +452,7 @@ func getTorExitNodes() []string {
 
 // Validate the URI
 func validURL(uri string) bool {
-	_, err := url.ParseRequestURI(uri)
+	_, err = url.ParseRequestURI(uri)
 	return err == nil
 }
 
