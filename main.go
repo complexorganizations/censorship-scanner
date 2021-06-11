@@ -353,20 +353,15 @@ func advancedNetworkCheck() {
 	fmt.Println("Public IP:", getCurrentPublicIP())
 }
 
+// To see if you can connect to the Tor network.
 func torExitNodeTest() {
 	torExitIPs := getTorExitNodes()
 	for i := 0; i < len(torExitIPs); i++ {
-		_, err := http.Get(torExitIPs[i])
-		if err == nil {
-			//log.Println("Censored TOR: ", torExitIPs[i])
+		_, err := net.Dial("tcp", torExitIPs[i]+":80")
+		if err != nil {
+			log.Println("Censored TOR:", torExitIPs[i])
 		} else {
-			_, err := net.Dial("tcp", torExitIPs[i]+":80")
-			//checkTor.Close()
-			if err != nil {
-				log.Println("Censored TOR:", torExitIPs[i])
-			} else {
-				fmt.Println("Valid Tor:", torExitIPs[i])
-			}
+			fmt.Println("Valid Tor:", torExitIPs[i])
 		}
 	}
 }
