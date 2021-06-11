@@ -335,8 +335,7 @@ func advancedNetworkCheck() {
 func torExitNodeTest() {
 	torExitIPs := getTorExitNodes()
 	for i := 0; i < 250; i++ {
-		timeout := time.Duration(2) * time.Second
-		_, err := net.DialTimeout("tcp", torExitIPs[i]+":80", timeout)
+		_, err := net.DialTimeout("tcp", torExitIPs[i]+":80", time.Duration(2) * time.Second)
 		if err != nil {
 			log.Println("Censored TOR:", torExitIPs[i])
 		} else {
