@@ -39,7 +39,8 @@ Is it possible to use this to see if your DNS provider is limiting access to a p
 - Yes
 
 What is the total number of scans?
-- 500
+- 250 Domain(s)
+- 250 Tor IP(s)
 
 ---
 ### Author
