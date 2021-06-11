@@ -48,6 +48,7 @@ func main() {
 		basicNetworkCheck()
 	} else if advancedScan {
 		go advancedNetworkCheck()
+		go publicDnsTest()
 		torExitNodeTest()
 	}
 }
@@ -344,6 +345,39 @@ func torExitNodeTest() {
 	}
 }
 
+func publicDnsTest() {
+	publicDnsList := []string{
+		"8.8.8.8",
+		"8.8.4.4",
+		"1.1.1.1",
+		"1.0.0.1",
+		"208.67.222.222",
+		"208.67.220.220",
+		"9.9.9.9",
+		"149.112.112.112",
+		"8.26.56.26",
+		"8.20.247.20",
+		"195.46.39.39",
+		"195.46.39.40",
+		"77.88.8.8",
+		"77.88.8.1",
+		"94.140.14.14",
+		"94.140.15.15",
+		"64.6.64.6",
+		"64.6.65.6",
+		"80.67.169.40",
+		"80.67.169.12",
+	}
+	for i := 0; i < len(publicDnsList); i++ {
+		_, err := net.DialTimeout("tcp", publicDnsList[i]+":53", time.Duration(2) * time.Second)
+		if err != nil {
+			log.Println("Censored DNS:", publicDnsList[i])
+		} else {
+			fmt.Println("Valid DNS:", publicDnsList[i])
+		}
+	}
+}
+
 // Make all the array unique
 func makeUnique(randomStrings []string) []string {
 	flag := make(map[string]bool)
@@ -416,10 +450,7 @@ func getTorExitNodes() []string {
 // Validate the URI
 func validURL(uri string) bool {
 	_, err := url.ParseRequestURI(uri)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // send all the request
