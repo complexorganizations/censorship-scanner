@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 )
@@ -320,6 +321,7 @@ func advancedNetworkCheck() {
 		"https://www.nasa.gov",
 	}
 	uniqueDomains := makeUnique(websiteTestList)
+	sort.Strings(uniqueDomains)
 	// Send the http request and see if certificates are valid.
 	for i := 0; i < len(uniqueDomains); i++ {
 		sendTheRequest(uniqueDomains[i])
