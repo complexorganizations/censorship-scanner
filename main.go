@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -20,6 +21,7 @@ var (
 	basicScan    bool
 	advancedScan bool
 	err          error
+	wg           sync.WaitGroup
 )
 
 func init() {
@@ -48,9 +50,11 @@ func main() {
 	if basicScan {
 		basicNetworkCheck()
 	} else if advancedScan {
+		wg.Add(2)
 		go advancedNetworkCheck()
 		go publicDnsTest()
 		torExitNodeTest()
+		wg.Wait()
 	}
 }
 
@@ -331,6 +335,7 @@ func advancedNetworkCheck() {
 	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
 	fmt.Println("Public IP:", getCurrentPublicIP())
+	wg.Done()
 }
 
 // To see if you can connect to the Tor network.
@@ -345,6 +350,7 @@ func torExitNodeTest() {
 			fmt.Println("Valid TOR:", torExitIPs[i])
 		}
 	}
+	wg.Done()
 }
 
 func publicDnsTest() {
@@ -379,6 +385,7 @@ func publicDnsTest() {
 			fmt.Println("Valid DNS:", publicDnsList[i])
 		}
 	}
+	wg.Done()
 }
 
 // Make all the array unique
@@ -467,9 +474,11 @@ func sendTheRequest(url string) {
 				log.Println("Censored URL:", url)
 			} else if !(url == resp.Request.URL.String()) {
 				log.Println("Error URL:", url)
+				wg.Add(1)
 				go validateSSLCert(url)
 			} else {
 				fmt.Println("Valid URL:", url)
+				wg.Add(1)
 				go validateSSLCert(url)
 			}
 		}
@@ -495,4 +504,5 @@ func validateSSLCert(hostname string) {
 	} else {
 		fmt.Println("Valid SSL:", parsedHostname)
 	}
+	wg.Done()
 }
