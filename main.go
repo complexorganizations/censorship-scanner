@@ -119,7 +119,7 @@ func advancedNetworkCheck() {
 		"https://www.chanty.com",
 		"https://www.tensorflow.org",
 		"https://fontawesome.com",
-		"https://getbootstrap.com",
+		"https://geti2p.net",
 		"https://redis.io",
 		"https://monday.com",
 		"https://taskworld.com",
