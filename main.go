@@ -424,7 +424,7 @@ func getCurrentPublicIP() []string {
 	// Verify that the urls are correct.
 	if validURL(url) {
 		// All insecure http requests are blocked.
-		if !strings.Contains(url, "http://") {
+		if !strings.HasPrefix(url, "http://") {
 			response, err := http.Get(url)
 			handleErrors(err)
 			body, err := io.ReadAll(response.Body)
@@ -444,7 +444,7 @@ func getTorExitNodes() []string {
 	// Verify that the urls are correct.
 	if validURL(url) {
 		// All insecure http requests are blocked.
-		if !strings.Contains(url, "http://") {
+		if !strings.HasPrefix(url, "http://") {
 			response, err := http.Get(url)
 			handleErrors(err)
 			body, err := io.ReadAll(response.Body)
@@ -468,7 +468,7 @@ func sendTheRequest(url string) {
 	// Verify that the urls are correct.
 	if validURL(url) {
 		// All insecure http requests are blocked.
-		if !strings.Contains(url, "http://") {
+		if !strings.HasPrefix(url, "http://") {
 			resp, err := http.Get(url)
 			if err != nil {
 				log.Println("Censored URL:", url)
