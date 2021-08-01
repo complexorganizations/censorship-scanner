@@ -66,8 +66,8 @@ func basicNetworkCheck() {
 	}
 	sort.Strings(basicWebsiteUsed)
 	// Send the http request and check for any certificates.
-	for i := 0; i < len(basicWebsiteUsed); i++ {
-		sendTheRequest(basicWebsiteUsed[i])
+	for _, basicWebsiteList := range basicWebsiteUsed {
+		sendTheRequest(basicWebsiteList)
 	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
 	fmt.Println("Public IP:", getCurrentPublicIP())
@@ -330,8 +330,8 @@ func advancedNetworkCheck() {
 	uniqueDomains := makeUnique(websiteTestList)
 	sort.Strings(uniqueDomains)
 	// Send the http request and see if certificates are valid.
-	for i := 0; i < len(uniqueDomains); i++ {
-		sendTheRequest(uniqueDomains[i])
+	for _, uniqueDomainList := range uniqueDomains {
+		sendTheRequest(uniqueDomainList)
 	}
 	fmt.Println("Private IP:", getCurrentPrivateIP())
 	fmt.Println("Public IP:", getCurrentPublicIP())
@@ -377,12 +377,12 @@ func publicDnsTest() {
 		"80.67.169.12",
 	}
 	sort.Strings(publicDnsList)
-	for i := 0; i < len(publicDnsList); i++ {
-		_, err = net.DialTimeout("tcp", publicDnsList[i]+":53", time.Duration(2)*time.Second)
+	for _, publicDns := range publicDnsList {
+		_, err = net.DialTimeout("tcp", publicDns+":53", time.Duration(2)*time.Second)
 		if err != nil {
-			log.Println("Censored DNS:", publicDnsList[i])
+			log.Println("Censored DNS:", publicDns)
 		} else {
-			fmt.Println("Valid DNS:", publicDnsList[i])
+			fmt.Println("Valid DNS:", publicDns)
 		}
 	}
 	wg.Done()
@@ -392,10 +392,10 @@ func publicDnsTest() {
 func makeUnique(randomStrings []string) []string {
 	flag := make(map[string]bool)
 	var uniqueString []string
-	for i := 0; i < len(randomStrings); i++ {
-		if !flag[randomStrings[i]] {
-			flag[randomStrings[i]] = true
-			uniqueString = append(uniqueString, randomStrings[i])
+	for _, content := range randomStrings {
+		if !flag[content] {
+			flag[content] = true
+			uniqueString = append(uniqueString, content)
 		}
 	}
 	return uniqueString
