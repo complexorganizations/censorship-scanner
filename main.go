@@ -388,17 +388,25 @@ func publicDnsTest() {
 	wg.Done()
 }
 
-// Make all the array unique
+// Make a unique array of strings.
 func makeUnique(randomStrings []string) []string {
-	flag := make(map[string]bool)
 	var uniqueString []string
-	for _, content := range randomStrings {
-		if !flag[content] {
-			flag[content] = true
-			uniqueString = append(uniqueString, content)
+	for _, value := range randomStrings {
+		if !arrayContains(value, uniqueString) {
+			uniqueString = append(uniqueString, value)
 		}
 	}
 	return uniqueString
+}
+
+// Check if the array contains the value.
+func arrayContains(cointains string, originalArray []string) bool {
+	for _, value := range originalArray {
+		if value == cointains {
+			return true
+		}
+	}
+	return false
 }
 
 // Take care of any errors that arise.
