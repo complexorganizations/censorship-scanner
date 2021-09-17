@@ -426,9 +426,9 @@ func getCurrentPrivateIP() []net.IP {
 }
 
 // Obtain the public IP address of the system.
-func getCurrentPublicIP() []string {
+func getCurrentPublicIP() string {
 	var foundIP []string
-	url := "https://checkip.amazonaws.com"
+	url := "https://api.ipengine.dev"
 	// Verify that the urls are correct.
 	if validURL(url) {
 		// All insecure http requests are blocked.
@@ -442,7 +442,7 @@ func getCurrentPublicIP() []string {
 			foundIP = regex.FindAllString(string(body), -1)
 		}
 	}
-	return foundIP
+	return foundIP[0]
 }
 
 // Obtain the public IP address of all tor exit nodes.
