@@ -426,7 +426,7 @@ func getCurrentPrivateIP() []net.IP {
 }
 
 // Obtain the public IP address of the system.
-func getCurrentPublicIP() string {
+func getCurrentPublicIP() []string {
 	var foundIP []string
 	url := "https://api.ipengine.dev"
 	// Verify that the urls are correct.
@@ -440,9 +440,13 @@ func getCurrentPublicIP() string {
 			response.Body.Close()
 			regex := regexp.MustCompile(`\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b`)
 			foundIP = regex.FindAllString(string(body), -1)
+			if len(foundIP) == 0 {
+				regex = regexp.MustCompile(`\b(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\b`)
+				foundIP = regex.FindAllString(string(body), -1)
+			}
 		}
 	}
-	return foundIP[0]
+	return foundIP
 }
 
 // Obtain the public IP address of all tor exit nodes.
