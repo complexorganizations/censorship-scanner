@@ -484,7 +484,7 @@ func sendTheRequest(url string) {
 			resp, err := http.Get(url)
 			if err != nil {
 				log.Println("Censored URL:", url)
-			} else if !(url == resp.Request.URL.String()) {
+			} else if (url != resp.Request.URL.String()) {
 				log.Println("Error URL:", url)
 				wg.Add(1)
 				go validateSSLCert(url)
